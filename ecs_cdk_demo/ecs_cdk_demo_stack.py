@@ -52,8 +52,9 @@ class EcsCdkDemoStack(Stack):
             desired_count=1,
             load_balancer= self.alb,
             cpu=512, 
+            assign_public_ip= True,  #needed to pull container
             task_image_options=ecs_patterns.ApplicationLoadBalancedTaskImageOptions(
-                image=ecs.ContainerImage.from_registry("amazon/amazon-ecs-sample")
+                image=ecs.ContainerImage.from_registry("public.ecr.aws/nginx/nginx:latest")
             )                      
         )
 
