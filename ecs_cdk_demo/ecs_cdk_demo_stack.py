@@ -4,7 +4,9 @@ from aws_cdk import (
     aws_ec2 as ec2,
     aws_ecs as ecs,
     aws_ecs_patterns as ecs_patterns,
-    aws_elasticloadbalancingv2 as alb
+    aws_elasticloadbalancingv2 as alb,
+    aws_route53 as route53,
+    aws_certificatemanager as certificatemanager
 )
 
 class EcsCdkDemoStack(Stack):
@@ -36,22 +38,36 @@ class EcsCdkDemoStack(Stack):
             subnets=self.vpc.select_subnets(subnet_group_name="Public-Subnet").subnets
         )
 
-        self.alb = alb.ApplicationLoadBalancer(self, "demo_alb",
-            vpc= self.vpc,
-            vpc_subnets= self.vpc_public_subnets,
-            internet_facing= True
+        # Given how often I delete this stack, I wanted to Hosted Zone to remain.
+        # The SOA is in a different account
+        self.zone = route53.HostedZone.from_lookup(self,
+            "cdkdemo_hosted_zone",
+            domain_name="cdkdemo.techmonkey.pro")
+
+        self.cert = certificatemanager.Certificate(self,
+            "demo_cert",
+            domain_name="cdkdemo.techmonkey.pro",
+            subject_alternative_names= ['*.cdkdemo.techmonkey.pro'],
+            validation= certificatemanager.CertificateValidation.from_dns(self.zone)
         )
 
-        self.cluster = ecs.Cluster(self, "demo_cluster", vpc=self.vpc)
+        self.ecs_cluster = ecs.Cluster(self, "demo_cluster", vpc=self.vpc)
+        
+        self.ecs_cluster.add_default_cloud_map_namespace(
+            name="service",
+        )
 
         self.fargate_service = ecs_patterns.ApplicationLoadBalancedFargateService(
             self, "demo_fargate_service",
-            cluster=self.cluster,
+            cluster=self.ecs_cluster,
             memory_limit_mib=1024,
             task_subnets= self.vpc_public_subnets,
             desired_count=1,
-            load_balancer= self.alb,
             cpu=512, 
+            redirect_http=True,
+            certificate=self.cert,
+            domain_name="cdkdemo.techmonkey.pro",
+            domain_zone=self.zone,
             assign_public_ip= True,  #needed to pull container
             task_image_options=ecs_patterns.ApplicationLoadBalancedTaskImageOptions(
                 image=ecs.ContainerImage.from_registry("public.ecr.aws/nginx/nginx:latest")
