@@ -1,0 +1,12 @@
+{
+  "availability-zones:account=310181001400:region=us-west-2": [
+    "us-west-2a",
+    "us-west-2b",
+    "us-west-2c",
+    "us-west-2d"
+  ],
+  "hosted-zone:account=310181001400:domainName=cdkdemo.techmonkey.pro:region=us-west-2": {
+    "Id": "/hostedzone/Z076851316LNVI92CVD6P",
+    "Name": "cdkdemo.techmonkey.pro."
+  }
+}
