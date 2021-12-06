@@ -1,1 +1,29 @@
--e .
+attrs==21.2.0
+aws-cdk-lib==2.0.0
+aws-cdk.cloud-assembly-schema==1.106.1
+aws-cdk.core==1.106.1
+aws-cdk.cx-api==1.106.1
+aws-cdk.region-info==1.106.1
+backports.entry-points-selectable==1.1.1
+cattrs==1.8.0
+cfgv==3.3.1
+constructs==10.0.9
+distlib==0.3.3
+-e git+https://github.com/Cordivae/ecs_cdk_demo.git@cca5186097ed03da80ab2371f44113c9f68d87e2#egg=ecs_cdk_demo
+filelock==3.4.0
+flake8==4.0.1
+identify==2.4.0
+jsii==1.46.0
+mccabe==0.6.1
+nodeenv==1.6.0
+platformdirs==2.4.0
+pre-commit==2.16.0
+publication==0.0.3
+pycodestyle==2.8.0
+pyflakes==2.4.0
+python-dateutil==2.8.2
+PyYAML==6.0
+six==1.16.0
+toml==0.10.2
+typing-extensions==3.10.0.2
+virtualenv==20.10.0
