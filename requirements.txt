@@ -1,7 +1,6 @@
 attrs==21.2.0
 aws-cdk-lib==2.0.0
 aws-cdk.cloud-assembly-schema==1.106.1
-aws-cdk.core==1.106.1
 aws-cdk.cx-api==1.106.1
 aws-cdk.region-info==1.106.1
 backports.entry-points-selectable==1.1.1
